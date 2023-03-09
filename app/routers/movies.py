@@ -10,8 +10,8 @@ router = APIRouter(
 
 
 @router.get("/list")
-async def movies(page: int = 1, lang: str = "en-US"):
-    url = url_generator.create_url("/discover/movie", lang) + "&page=" + str(page)
+async def movies(sort: str = "popularity.desc", page: int = 1, lang: str = "en-US"):
+    url = url_generator.create_url("/discover/movie", lang) + "&sort_by=" + sort + "&page=" + str(page)
 
     r = requests.get(url)
     data = r.json()["results"]

@@ -12,6 +12,8 @@ def create_url(path: str, lang: str):
 
 
 def create_image_url(path: str, size: str = "original"):
+    if path is None:
+        return None
     with open('app/config.json', 'r') as f:
         cfg = json.load(f)
         base_url = cfg['image-url'] + "/"
