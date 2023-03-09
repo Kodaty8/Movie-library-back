@@ -1,7 +1,8 @@
-import json
 import requests
 
 from fastapi import APIRouter
+
+from app.utils import url_generator
 
 router = APIRouter(
     prefix="/movies"
@@ -9,15 +10,20 @@ router = APIRouter(
 
 
 @router.get("/list")
-async def movies(lang: str = "en-US"):
-    with open('app/config.json', 'r') as f:
-        cfg = json.load(f)
-        base_url = cfg['base-url'] + "/discover/movie"
-        api_key = "?api_key=" + cfg['api-key']
-        lang_param = "&language=" + lang
+async def movies(page: int = 1, lang: str = "en-US"):
+    url = url_generator.create_url("/discover/movie", lang) + "&page=" + str(page)
 
-    url = base_url + api_key + lang_param
     r = requests.get(url)
-    data = r.json()
+    data = r.json()["results"]
 
-    return data["results"]
+    movies_list = []
+    for movie in data:
+        movies_list.append({
+            "id": movie['id'],
+            "title": movie['title'],
+            "backdrop": url_generator.create_image_url(movie['backdrop_path'], "w780"),
+            "rating": movie['vote_average'],
+            "lang": movie['original_language']
+        })
+
+    return movies_list
