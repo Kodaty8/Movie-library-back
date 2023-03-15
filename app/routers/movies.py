@@ -29,7 +29,7 @@ async def movies(sort: str = "popularity.desc", page: int = 1, lang: str = "en-U
 
     res = {
         "page": page,
-        "pages_nb": data["total_pages"],
+        "pages_nb": 500,
         "movies": movies_list
     }
 
