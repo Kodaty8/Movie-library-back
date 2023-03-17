@@ -2,7 +2,7 @@ import requests
 
 from fastapi import APIRouter
 
-from app.utils import url_generator
+from app.utils import url_builder
 
 router = APIRouter(
     prefix="/movies"
@@ -11,7 +11,7 @@ router = APIRouter(
 
 @router.get("/list")
 async def movies(sort: str = "popularity.desc", page: int = 1, lang: str = "en-US"):
-    url = url_generator.create_url("/discover/movie", lang) + "&sort_by=" + sort + "&page=" + str(page)
+    url = url_builder.create_url("/discover/movie", lang) + "&sort_by=" + sort + "&page=" + str(page)
 
     r = requests.get(url)
     data = r.json()
@@ -22,7 +22,7 @@ async def movies(sort: str = "popularity.desc", page: int = 1, lang: str = "en-U
         movies_list.append({
             "id": movie_item['id'],
             "title": movie_item['title'],
-            "backdrop": url_generator.create_image_url(movie_item['backdrop_path'], "w780"),
+            "backdrop": url_builder.create_image_url(movie_item['backdrop_path'], "w780"),
             "rating": movie_item['vote_average'],
             "lang": movie_item['original_language'],
         })
@@ -38,7 +38,7 @@ async def movies(sort: str = "popularity.desc", page: int = 1, lang: str = "en-U
 
 @router.get("/{movie_id}")
 async def movie(movie_id: int, lang: str = "en-US"):
-    url = url_generator.create_url("/movie/" + str(movie_id), lang)
+    url = url_builder.create_url("/movie/" + str(movie_id), lang)
     r = requests.get(url)
     data = r.json()
 
@@ -54,8 +54,8 @@ async def movie(movie_id: int, lang: str = "en-US"):
         "id": data["id"],
         "title": data["title"],
         "original_title": data["original_title"],
-        "poster": url_generator.create_image_url(data["poster_path"], "w500"),
-        "backdrop": url_generator.create_image_url(data['backdrop_path'], "w780"),
+        "poster": url_builder.create_image_url(data["poster_path"], "w500"),
+        "backdrop": url_builder.create_image_url(data['backdrop_path'], "w780"),
         "synopsis": data["overview"],
         "genres": genres,
         "rating": data['vote_average'],
