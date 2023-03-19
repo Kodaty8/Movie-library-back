@@ -14,7 +14,7 @@ router = APIRouter(
 
 
 @router.post("/signup")
-async def signup(user: schemas.UserCredentials, db: Session = Depends(database.get_db)):
+async def signup(user: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
     db_user = auth.get_user_dict(user.username, db)
     if db_user:
         raise HTTPException(status_code=409, detail="Username already registered")
@@ -24,7 +24,7 @@ async def signup(user: schemas.UserCredentials, db: Session = Depends(database.g
     access_token = auth.create_access_token(
         data={"sub": account.username}
     )
-    return {"auth_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.get("/me")
