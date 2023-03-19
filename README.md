@@ -1,4 +1,4 @@
 # Movie-library-back
 
 to launch the project: 
-uvicorn app.main:app --reload
+`uvicorn app.main:app --reload`
