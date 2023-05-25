@@ -2,12 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from .routers import movies, users
+from routers.movies import router
+from routers.users import router
 
 app = FastAPI()
 
-app.include_router(movies.router)
-app.include_router(users.router)
+app.include_router(router)
+app.include_router(router)
 
 
 origins = [
