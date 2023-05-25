@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from routers.movies import router
-from routers.users import router
+from app.routers.movies import router
+from app.routers.users import router
 
 app = FastAPI()
 
